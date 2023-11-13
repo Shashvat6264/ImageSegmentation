@@ -104,7 +104,6 @@ class GraphMaker:
 
     def find_averages(self):
         self.graph = np.zeros((self.image.shape[0], self.image.shape[1]))
-        print(self.graph.shape)
         self.graph.fill(self.default)
         self.background_average = np.zeros(3)
         self.foreground_average = np.zeros(3)
@@ -130,18 +129,7 @@ class GraphMaker:
                 self.nodes.append((self.get_node_num(x, y, self.image.shape), 0, self.MAXIMUM))
 
             else:
-                '''d_f = np.power(self.image[y, x] - self.foreground_average, 2)
-                d_b = np.power(self.image[y, x] - self.background_average, 2)
-                d_f = np.sum(d_f)
-                d_b = np.sum(d_b)
-                e_f = d_f / (d_f + d_b)
-                e_b = d_b / (d_f + d_b)'''
                 self.nodes.append((self.get_node_num(x, y, self.image.shape), 0, 0))
-
-                '''if e_f > e_b:
-                    self.graph[y, x] = 1.0
-                else:
-                    self.graph[y, x] = 0.0'''
 
         for (y, x), value in np.ndenumerate(self.graph):
             if y == self.graph.shape[0] - 1 or x == self.graph.shape[1] - 1:
@@ -185,7 +173,6 @@ class GraphMaker:
             return
 
         to_save = np.zeros_like(self.image)
-
         np.copyto(to_save, self.image, where=self.mask)
         cv2.imwrite(str(filename), to_save)
 
