@@ -98,15 +98,8 @@ class GraphMaker:
         if len(self.background_seeds) == 0 or len(self.foreground_seeds) == 0:
             print("Please enter at least one foreground and background seed.")
             return
-
-        print("Making graph")
-        print("Finding foreground and background averages")
         self.find_averages()
-
-        print("Populating nodes and edges")
         self.populate_graph()
-
-        print("Cutting graph")
         self.cut_graph()
 
     def find_averages(self):
@@ -123,23 +116,12 @@ class GraphMaker:
             self.graph[coordinate[1] - 1, coordinate[0] - 1] = 1
 
     def __neighbor_weight_function(self, index, neighbor):
-        # x1, y1 = index
-        # x2, y2 = neighbor
-        # if self.weight_function_code == 'Paramless':
-        #     return 1 / (1 + np.sum(np.power(self.image[y1, x1] - self.image[y2, x2], 2)))
-        # if self.weight_function_code == 'Default':
-        #     if self.parameters is None:
-        #         self.gui_input_fn()
-        #     k = self.parameters['K']
-        #     s = self.parameters['s']
-        #     return k*exp(-(abs(np.sum(self.image[y1, x1]) - np.sum(self.image[y2, x2]))**2)/s)
         return self.weight_function_code.get_weight(self.image, index, neighbor, self.parameters, gui_input_fn=self.gui_input_fn)
 
     def populate_graph(self):
         self.nodes = []
         self.edges = []
 
-        # make all s and t connections for the graph
         for (y, x), value in np.ndenumerate(self.graph):
             if value == 0.0:
                 self.nodes.append((self.get_node_num(x, y, self.image.shape), self.MAXIMUM, 0))
