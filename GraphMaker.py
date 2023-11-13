@@ -5,6 +5,7 @@ import maxflow
 import os
 from math import *
 import shutil
+from WeightCalculation import *
 
 class GraphMaker:
 
@@ -33,7 +34,7 @@ class GraphMaker:
         self.current_overlay = self.seeds
         self.gui_input_fn = gui_input_fn
         self.parameters = None
-        self.weight_function_code = 'Default'
+        self.weight_function_code = Default()
 
     def set_parameters(self, parameters):
         self.parameters = parameters
@@ -122,16 +123,17 @@ class GraphMaker:
             self.graph[coordinate[1] - 1, coordinate[0] - 1] = 1
 
     def __neighbor_weight_function(self, index, neighbor):
-        x1, y1 = index
-        x2, y2 = neighbor
-        if self.weight_function_code == 'Paramless':
-            return 1 / (1 + np.sum(np.power(self.image[y1, x1] - self.image[y2, x2], 2)))
-        if self.weight_function_code == 'Default':
-            if self.parameters is None:
-                self.gui_input_fn()
-            k = self.parameters['K']
-            s = self.parameters['s']
-            return k*exp(-(abs(np.sum(self.image[y1, x1]) - np.sum(self.image[y2, x2]))**2)/s)
+        # x1, y1 = index
+        # x2, y2 = neighbor
+        # if self.weight_function_code == 'Paramless':
+        #     return 1 / (1 + np.sum(np.power(self.image[y1, x1] - self.image[y2, x2], 2)))
+        # if self.weight_function_code == 'Default':
+        #     if self.parameters is None:
+        #         self.gui_input_fn()
+        #     k = self.parameters['K']
+        #     s = self.parameters['s']
+        #     return k*exp(-(abs(np.sum(self.image[y1, x1]) - np.sum(self.image[y2, x2]))**2)/s)
+        return self.weight_function_code.get_weight(self.image, index, neighbor, self.parameters, gui_input_fn=self.gui_input_fn)
 
     def populate_graph(self):
         self.nodes = []

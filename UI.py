@@ -5,6 +5,7 @@ from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import GraphMaker
+from WeightCalculation import *
 
 class UI:
 
@@ -76,8 +77,12 @@ class UI:
         functionLabel = QLabel('Weight Function to be used')
         hoLayout.addWidget(functionLabel)
         functionComboBox = QComboBox()
-        functionComboBox.addItems(['Default', 'Paramless'])
-        functionComboBox.currentTextChanged.connect(self.functionSet)
+        self.weight_fns = [
+            Default(),
+            Paramless()
+        ]
+        functionComboBox.addItems([v.get_name() for v in self.weight_fns])
+        functionComboBox.currentIndexChanged.connect(self.functionSet)
         hoLayout.addWidget(functionComboBox)
         self.states['function'] = functionComboBox
         self.stateLayout.addLayout(hoLayout)
@@ -131,7 +136,7 @@ class UI:
     def functionSet(self, v):
         self.graph_maker.set_parameters(None)
         self.removeStateLayout()
-        self.graph_maker.weight_function_code = v
+        self.graph_maker.weight_function_code = self.weight_fns[v]
 
     def open_dialogue_box(self):
         class CustomDialog(QDialog):
@@ -182,6 +187,7 @@ class UI:
             print("Success!")
         else:
             print("Cancel!")
+        return self.graph_maker.parameters
 
     @staticmethod
     def get_qimage(cvimage):
