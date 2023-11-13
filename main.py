@@ -1,5 +1,5 @@
-from NewCutUI import NewCutUI
+from UI import UI
 
 if __name__ == "__main__":
-    newUI = NewCutUI()
-    newUI.run()
+    ui = UI()
+    ui.run()

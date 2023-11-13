@@ -6,7 +6,7 @@ from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import GraphMaker
 
-class NewCutUI:
+class UI:
 
     def __init__(self):
         self.graph_maker = GraphMaker.GraphMaker(self.open_dialogue_box)
